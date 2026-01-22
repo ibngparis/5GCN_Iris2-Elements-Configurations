@@ -1,0 +1,147 @@
+# Example UPF configuration aligned to the SMF example (PFCP 8805, GTP-U 2152)
+info:
+  description: "Example UPF configuration for 5GCN (matches SMF example)"
+  version: "1.0.0"
+
+upf_identity:
+  id: "upf-1"
+  nodeId: "192.0.2.11"
+  regionId: "000001"
+  setId: "00001"
+  pointer: "00"
+
+interfaces:
+  # Physical or logical interfaces on the UPF node
+  - name: "access"          # N3 (towards gNB)
+    ifname: "eth1"
+    ip: "198.51.100.20"     # gNB-facing IP (example)
+    mtu: 1500
+  - name: "core"            # N9 / DNN / external network
+    ifname: "eth2"
+    ip: "203.0.113.10"      # Data-network-facing IP
+    mtu: 1500
+  - name: "cp"              # Control-plane interface (PFCP)
+    ifname: "eth0"
+    ip: "192.0.2.11"        # PFCP and GTP-U bind address
+
+pfcp:
+  # PFCP (N4) settings
+  bindAddr: "192.0.2.11"
+  port: 8805
+  keepalive:
+    interval: 30
+    retry: 3
+  smfPeers:
+    - id: "smf-1"
+      address: "192.0.2.3"
+      pfcpPort: 8805
+      transport:
+        protocol: "udp"
+        srcPort: 8805
+
+gtpu:
+  # GTP-U (user plane) settings - N3 / N9 transport
+  bindAddr: "192.0.2.11"
+  port: 2152
+  interfaces:
+    - name: "n3"
+      iface: "access"
+      teidRange: "0x00000001-0xFFFFFFFF"
+    - name: "n9"
+      iface: "core"
+      teidRange: "0x00000001-0xFFFFFFFF"
+
+dnnMappings:
+  # Map DNN to uplink routes / NAT / IP allocation pools
+  - dnn: "internet"
+    ulaPool:
+      - start: "10.45.0.2"
+        end:   "10.45.255.254"
+    subnet: "10.45.0.0/16"
+    dns:
+      - "8.8.8.8"
+      - "8.8.4.4"
+    nat:
+      enabled: true
+      externalIp: "203.0.113.10"
+  - dnn: "ims"
+    ulaPool:
+      - start: "10.46.0.2"
+        end:   "10.46.255.254"
+    subnet: "10.46.0.0/16"
+    dns:
+      - "9.9.9.9"
+    nat:
+      enabled: false
+
+packetDetectionRules:
+  # Example PDR templates (PDUSession establishment will create specific PDRs via PFCP)
+  - id: 1
+    name: "uplink_template"
+    precedence: 100
+    far:
+      applyAction: "forward"
+      outInterface: "core"   # forward to core (N9) / external DNN
+    pdi:
+      sourceInterface: "access"
+    outerHeaderRemoval: "gtpU"
+
+  - id: 2
+    name: "downlink_template"
+    precedence: 100
+    far:
+      applyAction: "forward"
+      outInterface: "access" # forward to gNB (N3)
+    pdi:
+      sourceInterface: "core"
+    outerHeaderCreation:
+      type: "gtpU"
+      teid: 0                 # assigned per-session by PFCP
+
+forwardingRules:
+  # Simple forwarding policies (N3 <-> N9)
+  - id: "fwd-internet"
+    match:
+      - inInterface: "access"
+    actions:
+      - outInterface: "core"
+      - applyNAT: true
+
+  - id: "fwd-to-gnb"
+    match:
+      - inInterface: "core"
+    actions:
+      - outInterface: "access"
+
+qos:
+  # Basic QoS handling (SMF provides QoS rules; UPF enforces)
+  defaultQos:
+    maxUplink: "1Gbit"
+    maxDownlink: "1Gbit"
+
+logging:
+  level: "INFO"
+  file: "/var/log/upf/upf.log"
+
+system:
+  kernel:
+    ip_forward: true
+    tcp_timestamps: false
+  required_modules:
+    - "gtp"
+    - "nf_conntrack"
+    - "xt_nat"
+  firewall:
+    ensure_forwarding_rules: true
+
+health:
+  prometheus:
+    enable: true
+    listenAddr: "0.0.0.0"
+    port: 9300
+
+notes:
+  - "This configuration binds PFCP to 192.0.2.11:8805 and GTP-U to 192.0.2.11:2152 to match the SMF example."
+  - "SMF is listed as PFCP peer at 192.0.2.3:8805 (ensure SMF uses the same address/port when establishing PFCP)."
+  - "Adjust interface names, IPs, TEID allocation strategy and xalignment with your kernel or userspace dataplane (e.g., VPP, DPDK, Linux GTP)."
+  - "PDR/FAR templates are illustrative — SMF will install session-specific PDRs/FARs via PFCP during PDU-session setup."
