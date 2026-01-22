@@ -1,0 +1,116 @@
+# Example AMF configuration (template). Adapt names/keys to your implementation.
+info:
+  description: "Example AMF configuration for 5GCN"
+  version: "1.0.0"
+
+sbi:
+  # Service-Based Interface (HTTP/HTTPS) binding of the AMF for other NFs (NRF, SMF, AUSF, etc.)
+  scheme: "http"            # or "https"
+  registerIPv4: "192.0.2.10"
+  port: 8000
+  # TLS section if using https (files/paths depend on NF implementation)
+  tls:
+    enable: false
+    serverCert: "/path/to/server.pem"
+    serverKey: "/path/to/server.key"
+
+networkFunctions:
+  # Addresses/URIs of other core network functions the AMF will call
+  nrfUri: "http://192.0.2.1:8000"        # NRF service discovery
+  ausfUri: "http://192.0.2.2:8000"       # AUSF (authentication) - optional if using external auth
+  smfUri: "http://192.0.2.3:7777"        # Default/primary SMF (can be discovered via NRF)
+  udmUri: "http://192.0.2.4:7700"        # UDM
+  pcfUri: "http://192.0.2.5:8080"        # PCF (policy)
+  upfList:
+    - id: "upf-1"
+      address: "192.0.2.11"
+
+guamiList:
+  # One or more GUAMIs the AMF serves. GUAMI = PLMN + AMF region/set/pointer
+  - plmn:
+      mcc: "208"
+      mnc: "93"
+    amfRegionId: "000001"
+    amfSetId: "00001"
+    amfPointer: "00"
+    guami: "208930000010000"  # optional precomputed representation
+
+plmnSupportList:
+  # PLMN-specific capabilities and served TACs / S-NSSAI
+  - plmnId:
+      mcc: "208"
+      mnc: "93"
+    taiList:
+      - tac: "0001"
+      - tac: "0002"
+    sNssaiList:
+      - sst: 1
+        sd: "010203"
+      - sst: 1
+        sd: "000000"   # default slice (no SD)
+
+taiList:
+  # Top-level list of TAIs this AMF is responsible for (useful for NGAP/TAC mapping)
+  - plmn:
+      mcc: "208"
+      mnc: "93"
+    tac: "0001"
+
+ngap:
+  # NG-RAN (gNB) related configuration used by NGAP (GTP/NGAP connectivity)
+  listenAddr: "192.0.2.10"
+  port: 38412
+  ngapEnable: true
+  # List of expected gNB endpoints (for security/auth/validation)
+  gnbList:
+    - id: "gnb-1"
+      name: "gNB-site-1"
+      ip: "198.51.100.10"
+      amfRegionId: "000001"
+      tac: "0001"
+
+n1_n2:
+  # N1/N2 message forwarding config (SBI or direct NGAP depending on implementation)
+  n1TraffPolicy: "local"
+  n2TraffPolicy: "ngap"
+
+nas:
+  # NAS / registration related timers and options
+  registration: 
+    implicitDeregistrationTimer: 1800   # seconds
+  security:
+    integrityAlgorithms:
+      - "NIA2"
+      - "NIA1"
+    cipheringAlgorithms:
+      - "NEA2"
+      - "NEA1"
+
+mobility:
+  # Mobility management and reachability settings
+  accessTypes: ["3GPP"]
+  registrationRestrictions: {}
+
+serviceProfiles:
+  # Which services the AMF exposes/handles
+  - serviceName: "namf-comm"
+    apiPrefix: "/namf-comm/v1"
+  - serviceName: "namf-event"
+    apiPrefix: "/namf-event/v1"
+
+profiles:
+  # UE policy/profile defaults (DNNs, default-DNN, etc.)
+  default_dnn: "internet"
+  allowed_dnn:
+    - "internet"
+    - "ims"
+
+logging:
+  level: "INFO"
+  file: "/var/log/amf/amf.log"
+
+# Implementation notes:
+# - Replace PLMN (mcc/mnc), TACs, IPs, ports, and NF URIs with your network values.
+# - If using NRF-based discovery, the AMF typically registers its SBI endpoint with NRF at startup.
+# - TLS configuration is required for production; set sbi.scheme to https and populate cert/key paths.
+# - This template omits vendor-specific fields (e.g., free5GC uses different key names like `amf_name`, `served_guami`).
