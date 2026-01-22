@@ -1,0 +1,147 @@
+# Example SMF configuration aligned with the AMF example# Example SMF configuration aligned with the AMF example
+info:
+  description: "Example SMF configuration for 5GCN (aligned to the provided AMF example)"
+  version: "1.0.0"
+
+sbi:
+  # Service-Based Interface (HTTP/HTTPS) for other NFs (AMF, NRF, UDR/UDM, PCF, etc.)
+  scheme: "http"                 # or "https"
+  registerIPv4: "192.0.2.3"      # SMF IP used for SBI registration/discovery
+  port: 7777
+  tls:
+    enable: false
+    serverCert: "/path/to/smf-server.pem"
+    serverKey: "/path/to/smf-server.key"
+
+nf_services:
+  # NF endpoints this SMF will call or register with
+  nrfUri: "http://192.0.2.1:8000"        # NRF
+  amfUri: "http://192.0.2.10:8000"       # Primary AMF (to which SMF communicates via N1/N11)
+  udmUri: "http://192.0.2.4:7700"        # UDM
+  pcfUri: "http://192.0.2.5:8080"        # PCF
+
+smf_identity:
+  smfName: "smf-1"
+  smfRegionId: "000001"
+  smfSetId: "00001"
+  smfPointer: "00"
+
+pfcp:
+  # PFCP (N4) settings for communicating with UPFs
+  bindAddr: "192.0.2.3"
+  port: 8805
+  keepalive:
+    interval: 30   # seconds
+    retry: 3
+  upfList:
+    - id: "upf-1"
+      address: "192.0.2.11"
+      pfcpPort: 8805
+      gtpPort: 2152
+      # role: "access" / "core" etc. (implementation-specific)
+
+plmnSupportList:
+  # Matches the AMF example PLMN / S-NSSAI served
+  - plmnId:
+      mcc: "208"
+      mnc: "93"
+    sNssaiList:
+      - sst: 1
+        sd: "010203"
+      - sst: 1
+        sd: "000000"   # default / no SD
+    dnnList:
+      - dnn: "internet"
+      - dnn: "ims"
+    taiList:
+      - tac: "0001"
+      - tac: "0002"
+
+taiList:
+  # TAIs that the SMF expects or is associated with (for reachability / policy decisions)
+  - plmn:
+      mcc: "208"
+      mnc: "93"
+    tac: "0001"
+
+dnnConfiguration:
+  # DNN (Data Network Name) configurations used when creating PDU Sessions
+  - dnn: "internet"
+    ipv4_subnet: "10.45.0.0/16"
+    dns:
+      - "8.8.8.8"
+      - "8.8.4.4"
+    defaultQos:
+      ambr:
+        uplink: "1Gbit"
+        downlink: "1Gbit"
+  - dnn: "ims"
+    ipv4_subnet: "10.46.0.0/16"
+    dns:
+      - "9.9.9.9"
+
+pdu_session:
+  # Defaults/constraints for PDU sessions
+  defaultSessionType: "IPv4"
+  allowedSessionTypes:
+    - "IPv4"
+    - "IPv6"
+    - "IPv4v6"
+  default_sm_policy:
+    # Key SM policy defaults; real deployments get policies from PCF/AF/UDR
+    session_ambr:
+      uplink: "500Mbit"
+      downlink: "500Mbit"
+    max_number_of_pdu_sessions: 8
+
+serviceProfiles:
+  - serviceName: "nsmf-pdusession"
+    apiPrefix: "/nsmf-pdusession/v1"
+  - serviceName: "nsmf-smpolicy"
+    apiPrefix: "/nsmf-smpolicy/v1"
+  - serviceName: "nsmf-event"
+    apiPrefix: "/nsmf-event/v1"
+
+interfaces:
+  # Logical interface mappings (N11 = AMF-SMF, N4 = SMF-UPF)
+  n11:
+    listenAddr: "192.0.2.3"
+    port: 7777
+  n4:
+    pfcpListenAddr: "192.0.2.3"
+    pfcpPort: 8805
+
+timers:
+  # Example timers (seconds)
+  session_release_timeout: 60
+  pdu_session_setup_timeout: 30
+
+security:
+  # NAS or communication-level security settings (implementation-specific)
+  tls:
+    verify_peer: false
+  integrity_algorithms:
+    - "NIA2"
+    - "NIA1"
+  ciphering_algorithms:
+    - "NEA2"
+    - "NEA1"
+
+logging:
+  level: "INFO"
+  file: "/var/log/smf/smf.log"
+
+metrics:
+  enable: true
+  prometheus:
+    listenAddr: "0.0.0.0"
+    port: 9100
+
+# Implementation notes:
+# - Replace PLMN (mcc/mnc), TACs, IPs, ports, and NF URIs with your real network values.
+# - If using TLS, set sbi.scheme to https and populate cert/key paths and peer verification settings.
+# - PFCP ports and UPF addresses must match the UPF configuration (N4/PFCP).
+# - Real deployments use NRF discovery to find AMF/UPF/PCF/UDM endpoints rather than hardcoding URIs.
+# - Vendor-specific or project-specific fields will differ (free5GC / Open5GS have their own keys). 
+# - If you want a ready-to-run config for a particular OSS project, tell me which one and I’ll format this configuration to that project's exact schema.
+# - Here is above Description: "Example SMF configuration for 5GCN (aligned to the provided AMF example)"  version: "1.0.0"
