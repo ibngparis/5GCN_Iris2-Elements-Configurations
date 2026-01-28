@@ -1,0 +1,106 @@
+OVERLAP between OSS / IOPS in the IRIS2 5GCN 
+Can you now provide a list of the exact data objects that must be uniquely owned
+Copilot said:
+Copilot
+Absolutely — here is a precise, implementation‑ready list of data objects that must have a single, unique owner across OSS, IOPS, and Vendor.
+This prevents duplication, conflicts, and ambiguous authority in 5GC/OSS/IOPS architectures.
+
+I’ve structured the list into 7 domains:
+
+Service & Resource Models
+Inventory
+Configuration (CM)
+Policy & Intent
+Subscriber / Identity
+Telemetry (PM/FM/Logs/Traces)
+Lifecycle & Deployment
+For each object, I identify the required single owner (OSS vs IOPS vs Vendor).
+
+✅ 1. Service & Resource Model Objects (must be uniquely owned)
+These are architectural truth‑source objects that define how services and NFs are described.
+
+Data Object	Must‑Own Owner	Why
+Service Model (E2E service templates)	OSS	Ensures single service definition across domains.
+Resource Model (NF + infra abstractions)	OSS	Needed for orchestration + inventory alignment.
+Slice Templates (S‑NSSAI, QoS, topologies)	OSS	Centralized intent → avoids RAN/CN/transport mismatches.
+Topology Graphs (relations between AMF–SMF–UPF etc.)	OSS	Only OSS sees cross‑domain relationships.
+✅ 2. Inventory Objects (golden copies)
+Data Object	Must‑Own Owner	Notes
+Service Inventory (E2E services, configurations)	OSS	Authoritative view of live services.
+Resource Inventory (NF instances, VNFs/CNFs, slices)	OSS	Vendors manage only runtime; OSS owns master view.
+CI/PI Inventory (config items, versioning)	OSS	Needed for ITSM + rollback accuracy.
+IP address pools / identifiers used for NFs	OSS	Prevents duplication in multi‑vendor cores.
+✅ 3. Configuration Management (CM) Objects
+Vendor provides schemas; OSS must own the applied configuration.
+This is the most critical domain for single ownership.
+
+Data Object	Must‑Own Owner	Notes
+NF Configuration Data Models (YANG/Itf‑N profiles)	Vendor (Producer)	Vendor authors the schema.
+Applied Configuration Sets (AMF/SMF/UPF/PCF etc.)	OSS	OSS is source of truth for active configs.
+NF Parameter Catalog (defaults + allowed value ranges)	Vendor	Vendor defines allowed configuration space.
+Configuration Version History / rollback objects	OSS	Needed for governance and reproducibility.
+Certificates for Management Plane (TLS for OAM)	OSS/IOPS	Vendor can’t own operator trust domain.
+✅ 4. Policy & Intent Objects
+Data Object	Must‑Own Owner	Notes
+Network Intent Objects (QoS, routing, slice intent, scaling intent)	OSS	All automation originates from OSS intent.
+Closed‑loop Policies (KPI thresholds, triggers, RCA trees)	OSS	Cross‑domain; vendor cannot own.
+PCF Policy Rule Sets (top‑level definitions)	OSS	Vendor owns runtime execution, not the policy truth.
+AI/ML Models for assurance-based actions	OSS	Vendor may supply features; ownership stays operator-side.
+✅ 5. Subscriber / Identity Objects
+These are the strictest in terms of ownership.
+
+Data Object	Must‑Own Owner	Notes
+Subscriber Profiles (UDM data)	IOPS	Operator legally holds subscriber identity.
+Authentication Objects (keys, seeds, AUSF/UDM secrets)	IOPS	Vendor must not own cryptographic identity.
+Exposure Policies for NEF	OSS	Cross‑domain governance + compliance.
+✅ 6. Telemetry (FM/PM/Logs/Traces) Objects
+Vendor emits; OSS owns collection and lifecycle.
+
+Data Object	Must‑Own Owner	Notes
+Performance Measurement Catalog (KPI definitions)	Vendor	Vendor defines counters.
+Collected Performance Metrics (PM files, streams)	OSS	Single analytics data lake ingestion.
+Fault/Alarm Object Models (alarm types, severity mapping)	Vendor	Vendor defines alarm semantics.
+Correlated Alarms (post‑correlation events)	OSS	OSS assurance engine creates these.
+Logs + Traces (OTel, VES, syslog etc.)	OSS	Vendor cannot store operator logs long‑term.
+✅ 7. Lifecycle & Deployment Objects
+Data Object	Must‑Own Owner	Notes
+NF Software Images (binaries)	Vendor	Only vendor can produce these.
+Deployment Manifests (Helm charts, Operators, CNF packages)	Vendor	Vendor controls lifecycle logic.
+Instantiation Parameters (override YAMLs/intents)	OSS	Operator must own overrides applied at deploy time.
+Upgrade Plans / Execution Graphs	OSS	Vendor supplies instructions, not execution ownership.
+Observability Pipelines (collection, enrichment, storage)	OSS	Telemetry governance must be centralized.
+🔥 Master List — Condensed Version (One Object Per Line)
+Useful for architecture baseline documents.
+
+Owned by OSS
+E2E service models
+Resource models & NF abstractions
+Service inventory
+Resource inventory
+All applied configuration sets
+Configuration versioning
+Network intents
+Closed‑loop policies
+Slice templates
+NEF exposure policies
+PM/FM/log/trace collection pipeline
+Correlated alarms
+Instantiation overrides
+Upgrade execution plans
+Topology views (AMF ↔ SMF ↔ UPF etc.)
+Owned by IOPS
+Subscriber data (UDM)
+Authentication keys / cryptographic anchors
+Certificate lifecycle (trust domain)
+Operational processes (tickets, incidents, RCAs)
+Owned by Vendor
+NF configuration schemas (YANG/Itf‑N)
+Allowed parameter ranges
+Software images / packages / CNF operators
+Telemetry counter definitions (KPI/PM models)
+Alarm definitions & severity logic
+NF runtime behavior & scaling micro‑controllers
+If you want, I can also generate:
+✅ A PPTX visual diagram of all uniquely‑owned data objects
+✅ A table ready for governance documents
+✅ A machine‑readable YAML/JSON version for automation pipelines
