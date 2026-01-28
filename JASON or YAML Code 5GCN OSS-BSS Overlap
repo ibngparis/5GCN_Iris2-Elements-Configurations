@@ -1,0 +1,72 @@
+version: "1.0.0"
+generated: "2026-01-28"
+domains:
+  - name: ServiceAndResourceModels
+    owner: OSS
+    objects:
+      - id: svc.model
+        name: ServiceModel
+        description: E2E service templates and intent structure
+        uniqueness: global
+      - id: res.model
+        name: ResourceModel
+        description: NF and infrastructure abstraction models
+        uniqueness: global
+      - id: slice.template
+        name: SliceTemplate
+        description: S-NSSAI, QoS and topology templates
+        uniqueness: global
+      - id: topology.graph
+        name: TopologyGraph
+        description: Cross-domain relations among NFs and resources
+        uniqueness: global
+  - name: Inventory
+    owner: OSS
+    objects:
+      - { id: inv.service,  name: ServiceInventory,   uniqueness: global }
+      - { id: inv.resource, name: ResourceInventory,  uniqueness: global }
+      - { id: inv.ci,       name: ConfigItemInventory,uniqueness: global }
+      - { id: ip.pool,      name: IPPool,             uniqueness: per-domain }
+  - name: ConfigurationManagement
+    owner: Mixed
+    objects:
+      - { id: cm.schema,   name: ConfigSchema,          owner: Vendor, description: "NF configuration schemas (YANG/Itf-N)", uniqueness: per-NF-type }
+      - { id: cm.applied,  name: AppliedConfigSet,      owner: OSS,    description: "Source of truth for active NF parameters", uniqueness: per-NF-instance }
+      - { id: cm.param.catalog, name: ParameterCatalog, owner: Vendor, uniqueness: per-NF-type }
+      - { id: cm.versions, name: ConfigVersionHistory,  owner: OSS,    uniqueness: per-NF-instance }
+      - { id: cm.mgmt.certs, name: MgmtCertificates,    owner: IOPS,   uniqueness: operator-wide }
+  - name: PolicyAndIntent
+    owner: OSS
+    objects:
+      - { id: intent.network,    name: NetworkIntent,     uniqueness: global }
+      - { id: policy.closedloop, name: ClosedLoopPolicy,  uniqueness: global }
+      - { id: policy.pcf,        name: PCFPolicyRuleSet,  uniqueness: per-domain }
+      - { id: ml.model,          name: AssuranceMLModel,  uniqueness: per-usecase }
+  - name: SubscriberAndIdentity
+    owner: IOPS
+    objects:
+      - { id: sub.profile, name: SubscriberProfile, uniqueness: per-subscriber }
+      - { id: auth.keys,   name: AuthenticationKeys, uniqueness: operator-wide }
+      - { id: nef.exposure.policy, name: NEFExposurePolicy, owner: OSS, uniqueness: per-API }
+  - name: Telemetry
+    owner: Mixed
+    objects:
+      - { id: pm.catalog,   name: PMCatalog,        owner: Vendor, uniqueness: per-NF-type }
+      - { id: pm.records,   name: PMRecords,        owner: OSS,    uniqueness: time-series }
+      - { id: fm.model,     name: AlarmModel,       owner: Vendor, uniqueness: per-NF-type }
+      - { id: fm.correlated, name: CorrelatedAlarm, owner: OSS,    uniqueness: event-id }
+      - { id: obs.logs,     name: LogsTraces,       owner: OSS,    uniqueness: time-series }
+  - name: LifecycleAndDeployment
+    owner: Mixed
+    objects:
+      - { id: nf.image,        name: NFSoftwareImage,      owner: Vendor, uniqueness: per-version }
+      - { id: nf.package,      name: NFPackage,            owner: Vendor, uniqueness: per-version }
+      - { id: deploy.overrides,name: InstantiationOverrides, owner: OSS, uniqueness: per-deployment }
+      - { id: upgrade.plan,    name: UpgradeExecutionPlan, owner: OSS,    uniqueness: per-change }
+      - { id: obs.pipeline,    name: ObservabilityPipeline, owner: OSS,   uniqueness: operator-wide }
+ownership_rules:
+  - rule: "Each object must have exactly one authoritative owner (OSS, IOPS, or Vendor)."
+  - rule: "Vendors may produce schemas/images but cannot own applied configurations or operator secrets."
+  - rule: "OSS owns cross-domain intents, inventories, and correlation outputs."
+  - rule: "IOPS owns subscriber identities, keys, and certificate lifecycle."
+``
