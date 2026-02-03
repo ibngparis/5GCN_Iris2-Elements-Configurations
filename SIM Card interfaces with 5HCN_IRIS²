@@ -1,0 +1,131 @@
+Below is a **complete, sourced** overview of **all interfaces in which a SIM/USIM/eSIM (UICC) is involved in a 5G Core (5GCN) architecture**, including what is known about the **IRIS² NTN integration**.
+
+***
+
+# ✅ **1. SIM–Device Interface (UICC ↔ UE Terminal)**
+
+This is the **only direct physical interface involving the SIM card itself**.
+
+### **(a) UICC–Terminal Interface (USIM/eSIM)**
+
+Standardized by **ETSI / 3GPP (TS 31.121)**.  
+This interface defines how the handset (UE) communicates with the SIM:
+
+*   Access to **USIM application**
+*   Storage and retrieval of subscription data
+*   Execution of authentication procedures (5G AKA / EAP‑AKA')
+*   File system management on the SIM
+
+📄 **Source:** ETSI TS 131 121 – *UICC-terminal interface; USIM application test specification* [\[etsi.org\]](https://www.etsi.org/deliver/etsi_ts/131100_131199/131121/18.03.00_60/ts_131121v180300p.pdf)
+
+⚠️ **Important:**  
+The SIM **does not directly connect** to the 5G Core Network (5GC). All its interactions go **through the UE**, which then communicates with core network functions.
+
+***
+
+# ✅ **2. SIM-Induced Interfaces Inside the 5G Network (via the UE)**
+
+Once the UE reads SIM data and initiates registration, the following **5GC interfaces** become involved. These are not SIM interfaces per se, but **SIM-driven 5G procedures**.
+
+***
+
+## **2.1. N1 — UE ↔ AMF (Control Plane Signaling)**
+
+Carries Non‑Access Stratum (NAS) signaling, including:
+
+*   SIM-based **authentication messages** (5G‑AKA, EAP-AKA')
+*   Registration & subscription identity
+*   Security context establishment
+
+📄 **Sources:**  
+• Telecom Trainer – 5G Core Interfaces (N1 description)   
+• RF Wireless World – N1 overview [\[telecomtrainer.com\]](https://www.telecomtrainer.com/5g-core-interfaces/) [\[rfwireless-world.com\]](https://www.rfwireless-world.com/terminology/5g-network-interfaces)
+
+***
+
+## **2.2. N6 — AMF ↔ AUSF (Authentication)**
+
+Handles **UE / SIM authentication**:
+
+*   AUSF communicates with **UDM/ARPF** to validate SIM credentials (SUPI, authentication vectors)
+*   Used during 5G‑AKA or EAP‑AKA' procedures
+
+📄 **Source:** Telecom Trainer – N6 as the authentication interface [\[telecomtrainer.com\]](https://www.telecomtrainer.com/5g-core-interfaces/)
+
+***
+
+## **2.3. N9 — AMF ↔ UDM (Subscription Data)**
+
+Used for:
+
+*   Retrieval of **subscriber data** from UDM
+*   SUPI/ SUCI resolution
+*   Profile management
+
+📄 **Source:** Telecom Trainer – N9 (UE registration and subscription management) [\[telecomtrainer.com\]](https://www.telecomtrainer.com/5g-core-interfaces/)
+
+***
+
+## **2.4. Non-3GPP Access (if eSIM used for Wi‑Fi offloading)**
+
+Defined in **3GPP TS 24.502**, includes procedures for:
+
+*   Identity handling
+*   Authentication over non‑3GPP access (EAP‑AKA')
+*   N3IWF selection
+
+📄 **Source:** 3GPP TS 24.502 — Access to 5GC via Non‑3GPP Access [\[3gpp.org\]](https://www.3gpp.org/ftp/tsg_ct/WG1_mm-cc-sm_ex-CN1/TSGC1_150_Maastricht/Draft%20Specifications/Draft_24502-f80_rm_V0.1.doc)
+
+***
+
+# ✅ **3. High-Level Summary of SIM Interfaces in 5G Core**
+
+| Layer                          | Interface                     | Who Is Talking | Purpose                                                   |
+| ------------------------------ | ----------------------------- | -------------- | --------------------------------------------------------- |
+| **Physical**                   | **UICC–Terminal (USIM/eSIM)** | SIM ↔ UE       | Authentication credentials, identity, key derivation      |
+| **Control Plane**              | **N1**                        | UE ↔ AMF       | Registration, identity signaling, authentication messages |
+| **Core Authentication**        | **N6**                        | AMF ↔ AUSF     | SIM-based authentication vector verification              |
+| **Subscription Management**    | **N9**                        | AMF ↔ UDM      | Subscription data retrieval (SUPI, keys, policies)        |
+| **Non‑3GPP Access (optional)** | Defined in TS 24.502          | UE ↔ N3IWF     | EAP‑AKA’, WLAN offloading, identity mgmt                  |
+
+***
+
+# ✅ **4. How This Applies to IRIS² (5G NTN)**
+
+IRIS² uses **5G NR NTN** technology and is **fully integrated with the 5G Core Network**:
+
+*   IRIS² supports **direct UE–satellite–UE connectivity** through 5G NTN waveforms.
+*   The UE (and thus SIM) behaves exactly as in standard terrestrial 5G—same 3GPP authentication framework, same SIM interfaces.
+
+📄 **Source:** IRIS² Technical Description – fully integrated into 5GCN, 5G NR NTN waveform, direct UE-SAT access [\[key4biz.it\]](https://www.key4biz.it/wp-content/uploads/2025/03/iris2presentazione.pdf)
+
+**Meaning for SIM interfaces:**  
+✔️ No new SIM interface is created for IRIS².  
+✔️ The SIM participates in NTN access using **standard 5G AKA/EAP-AKA’ mechanisms** via the same N1/N6/N9 interfaces.
+
+***
+
+# ✅ **5. Final Complete List of All SIM-Relevant Interfaces in IRIS² / 5GCN**
+
+### **A. Direct SIM–UE interface**
+
+1.  **UICC-terminal interface** (TS 31.121, TS 31.102)
+
+### **B. UE-triggered 5GC interfaces involving SIM procedures**
+
+2.  **N1** (UE ↔ AMF) — SIM authentication signaling
+3.  **N6** (AMF ↔ AUSF) — authentication vector validation
+4.  **N9** (AMF ↔ UDM) — subscription & identity resolution
+5.  **Non‑3GPP access interfaces** (if eSIM profile used) — TS 24.502
+
+### **C. NTN/IRIS² specifics (no new SIM interfaces)**
+
+6.  **Standard 5G NR NTN integration** (SIM involved via unchanged 5G AKA procedures)
+
+***
+
+If you want, I can also draw a **diagram** showing how the SIM interacts with 5GC in IRIS², or map these interfaces **specifically to your IRIS² ground segment architecture**.
+
+
+
+
