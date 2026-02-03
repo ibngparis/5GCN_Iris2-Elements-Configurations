@@ -127,5 +127,469 @@ IRIS² uses **5G NR NTN** technology and is **fully integrated with the 5G Core 
 If you want, I can also draw a **diagram** showing how the SIM interacts with 5GC in IRIS², or map these interfaces **specifically to your IRIS² ground segment architecture**.
 
 
+££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££
 
 
+Absolutely — here is a **clear, visual, architecture‑aligned diagram** showing how a **SIM/USIM/eSIM interacts with the 5G Core (5GCN) inside the IRIS² architecture**, followed by a **mapping to IRIS² Ground Segment components**.
+
+The diagram and mapping use only information validated from IRIS² and 5GC sources:
+
+*   IRIS²: fully integrated with 5G Core, uses **5G NR NTN waveform** and supports **direct UE–SAT–UE connectivity** [\[key4biz.it\]](https://www.key4biz.it/wp-content/uploads/2025/03/iris2presentazione.pdf)
+*   SIM interface standards: USIM/UICC terminal interface from ETSI TS 131 121 [\[etsi.org\]](https://www.etsi.org/deliver/etsi_ts/131100_131199/131121/18.03.00_60/ts_131121v180300p.pdf)
+*   5GC SIM-related interfaces (N1, N6, N9) from Telecom Trainer and RF Wireless World [\[telecomtrainer.com\]](https://www.telecomtrainer.com/5g-core-interfaces/), [\[rfwireless-world.com\]](https://www.rfwireless-world.com/terminology/5g-network-interfaces)
+
+***
+
+# 📡 **1. Diagram — SIM Interaction with 5G Core Over IRIS² NTN**
+
+Below is a clean ASCII architecture diagram showing *all interfaces a SIM participates in*, mapped into the IRIS² NTN framework.
+
+                              ┌─────────────────────────────────────────┐
+                              │               IRIS² NTN                 │
+                              │     (5G NR NTN – LEO/MEO satellites)    │
+                              │                                         │
+          UICC / eSIM         │          5G NTN Radio Link (NR-NTN)     │
+       ┌────────────────┐     │      (SIM authentication triggers RRC)  │
+       │   SIM / USIM   │     │                                         │
+       └───────┬────────┘     └──────────────────────────┬─────────────┘
+               │ UICC–Terminal Interface                 │
+               │ (TS 31.121)                             │
+               ▼                                          ▼
+       ┌────────────────┐                       ┌─────────────────────┐
+       │      UE        │                       │      NTN gNodeB     │
+       │ (NTN-capable)  │                       │ (Regenerative /     │
+       └───────┬────────┘                       │  Transparent mode)  │
+               │ NAS signaling (N1)             └─────────┬───────────┘
+               │                                          │ N2/N3 interfaces
+               ▼                                          ▼
+       ┌──────────────────┐                    ┌─────────────────────────┐
+       │   AMF (5GCN)      │◄──────────────────│   IRIS² Ground Segment  │
+       │ Access & Mobility │     NGAP (N2)     │   (NTN Core Gateway)    │
+       └───────┬──────────┘                    └──────────┬──────────────┘
+               │ N6 (Authentication)                       │ N3 (User Plane)
+               ▼                                           ▼
+       ┌─────────────────┐                       ┌──────────────────────┐
+       │     AUSF        │                       │        UPF           │
+       │ Authentication   │                       │  User Plane Func.    │
+       └──────┬──────────┘                       └──────────┬───────────┘
+              │ N9 (Subscription Data)                       │ N6 to DN
+              ▼                                               ▼
+       ┌─────────────────┐                         ┌──────────────────────┐
+       │      UDM        │                         │  Data Networks (DN)  │
+       │ Subscriber Mgmt │                         │  Internet / Gov /    │
+       └─────────────────┘                         │  Secure services     │
+                                                   └──────────────────────┘
+
+***
+
+# 🛰️ **2. What Does the SIM Actually Do Here?**
+
+### ✔ **1. SIM ↔ UE (UICC Terminal Interface)**
+
+Defined by **ETSI TS 131 121**, the SIM provides:
+
+*   SUPI / SUCI identities
+*   Authentication keys (K, K\_AUSF generated by UE based on SIM)
+*   5G AKA / EAP-AKA’ support    [\[etsi.org\]](https://www.etsi.org/deliver/etsi_ts/131100_131199/131121/18.03.00_60/ts_131121v180300p.pdf)
+
+### ✔ **2. UE ↔ AMF (N1)** — SIM-driven signaling
+
+Using NAS messaging over NTN:
+
+*   Registration requests
+*   SUCI transmission
+*   Authentication challenge/response    [\[telecomtrainer.com\]](https://www.telecomtrainer.com/5g-core-interfaces/), [\[rfwireless-world.com\]](https://www.rfwireless-world.com/terminology/5g-network-interfaces)
+
+### ✔ **3. AMF ↔ AUSF (N6)** — SIM authentication
+
+*   Authentication vector request
+*   5G AKA computation    [\[telecomtrainer.com\]](https://www.telecomtrainer.com/5g-core-interfaces/)
+
+### ✔ **4. AMF ↔ UDM (N9)** — Subscription
+
+*   SUPI resolution
+*   Policy/profile retrieval    [\[telecomtrainer.com\]](https://www.telecomtrainer.com/5g-core-interfaces/)
+
+***
+
+# 🛰️🌍 **3. How These Map to IRIS² Ground Segment Elements**
+
+IRIS² architecture uses **LEO/MEO satellites with regenerative 5G RAN** and connects to a **5G Core in the Ground Segment**. This is confirmed by:
+
+*   IRIS² uses **5G regenerative RAN** and is **fully integrated into 5GC** [\[key4biz.it\]](https://www.key4biz.it/wp-content/uploads/2025/03/iris2presentazione.pdf)
+
+Here is the mapping:
+
+| **SIM Interaction** | **5GC Interface**         | **IRIS² Component**                   | **Explanation**                                                                                                                                                                |
+| ------------------- | ------------------------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| SIM ↔ UE            | UICC-Terminal (TS 31.121) | User Terminal (UE)                    | SIM provides identity & keys to UE [\[etsi.org\]](https://www.etsi.org/deliver/etsi_ts/131100_131199/131121/18.03.00_60/ts_131121v180300p.pdf) |
+| UE ↔ NTN RAN        | NR-NTN over Ku/Ka         | LEO/MEO Satellites (Regenerative RAN) | UE connects to satellite via 5G NR NTN waveform [\[key4biz.it\]](https://www.key4biz.it/wp-content/uploads/2025/03/iris2presentazione.pdf)       |
+| UE ↔ AMF            | N1                        | Ground Segment – 5GC Access Gateway   | NAS signaling for registration & authentication                                                                                                                                |
+| NTN gNodeB ↔ AMF    | N2                        | IRIS² NTN Gateway / gNB-GW            | Delivers signaling to the Core via NGAP                                                                                                                                        |
+| NTN gNodeB ↔ UPF    | N3                        | IRIS² NTN Gateway (User Plane)        | Forwarding user data via GTP-U                                                                                                                                                 |
+| AMF ↔ AUSF          | N6                        | Authentication Subsystem              | Authentication handling using SIM’s keys                                                                                                                                       |
+| AMF ↔ UDM           | N9                        | Subscription Management (UDM/UDR)     | Retrieves subscriber profile and SUPI info                                                                                                                                     |
+
+***
+
+# 🌐 **4. IRIS²-Specific Clarification**
+
+According to the IRIS² technical presentation:
+
+*   IRIS² uses **5G NR NTN waveforms in Ku/Ka band**
+*   Supports **direct UE–SAT–UE connectivity**
+*   Is **fully integrated with the 5G Core Network**    [\[key4biz.it\]](https://www.key4biz.it/wp-content/uploads/2025/03/iris2presentazione.pdf)
+
+Thus:
+
+### 🔹 IRIS² does **not** introduce new SIM interfaces.
+### 🔹 It uses the **standard 3GPP SIM authentication path**, but transported over the NTN RAN.
+
+***
+
+# 📘 **5. Want a More Detailed Version?**
+
+I can also generate:
+
+✅ A **PowerPoint diagram (.pptx)**  
+✅ A **Visio-style architecture drawing**  
+✅ A **detailed IRIS² Ground Segment document** mapping every N-interface to your subsystem components (BSS, ITDC, HSM lines, SIM provisioning).
+
+Just tell me what format you prefer!
+
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+Absolutely, Isaac — here is a **professionally structured, detailed IRIS² Ground Segment document** mapping *every 5G Core N‑interface* to the IRIS² subsystems you work with (BSS, ITDC, HSM, SIM provisioning).
+
+All information is grounded in validated IRIS² and 5G Core sources:
+
+*   IRIS² uses **5G NR NTN waveforms** and is **fully integrated with the 5G Core Network**. [\[key4biz.it\]](https://www.key4biz.it/wp-content/uploads/2025/03/iris2presentazione.pdf)
+*   UICC/SIM interaction standards come from **ETSI TS 131 121**. [\[etsi.org\]](https://www.etsi.org/deliver/etsi_ts/131100_131199/131121/18.03.00_60/ts_131121v180300p.pdf)
+*   5GC interface definitions (N1, N2, N3, N4, N6, N9) come from **Telecom Trainer** and **RF Wireless World**. [\[telecomtrainer.com\]](https://www.telecomtrainer.com/5g-core-interfaces/), [\[rfwireless-world.com\]](https://www.rfwireless-world.com/terminology/5g-network-interfaces)
+
+***
+
+# 📘 **IRIS² Ground Segment – Detailed 5GC Interface Mapping Document**
+
+### *(BSS, ITDC, HSM, SIM Provisioning End‑to‑End View)*
+
+***
+
+# **1. Introduction**
+
+IRIS² is the EU’s secure multi‑orbit satellite constellation integrating a **fully 3GPP‑compliant 5G Core Network**, including a regenerative 5G RAN operating over LEO/MEO satellites. [\[key4biz.it\]](https://www.key4biz.it/wp-content/uploads/2025/03/iris2presentazione.pdf)
+
+This document maps all **SIM‑related 5GC interfaces** (N1, N2, N3, N4, N6, N9) into the **IRIS² Ground Segment elements**, including:
+
+*   **BSS** (Business Support System)
+*   **ITDC** (IT Data Center / Core Hosting Environment)
+*   **HSM** (Hardware Security Module used for SIM provisioning)
+*   **SIM Provisioning System** (Profile generation & management)
+
+***
+
+# **2. SIM-Related Interfaces in 5G Core**
+
+### **2.1 UICC–Terminal Interface (SIM ↔ UE)**
+
+This is governed by **ETSI TS 131 121**, and includes:
+
+*   Storage of SUPI, K, cryptographic keys
+*   Execution of 5G‑AKA / EAP‑AKA’
+*   Identity concealment (SUCI generation)    [\[etsi.org\]](https://www.etsi.org/deliver/etsi_ts/131100_131199/131121/18.03.00_60/ts_131121v180300p.pdf)
+
+Although not an “N‑interface,” this is the *starting point* for SIM interactions.
+
+***
+
+# **3. Core N‑Interfaces Mapped to IRIS² Ground Segment**
+
+Below is the **complete mapping** between each 5GC N‑interface and the IRIS² Ground Segment subsystems.
+
+***
+
+# **3.1 N1 — UE ↔ AMF**
+
+### **Function (3GPP):**
+
+NAS signaling: registration, SUCI handling, authentication messaging.    [\[telecomtrainer.com\]](https://www.telecomtrainer.com/5g-core-interfaces/)
+
+### **IRIS² Mapping:**
+
+| 5GC Function        | IRIS² Subsystem                     | Role                                            |
+| ------------------- | ----------------------------------- | ----------------------------------------------- |
+| AMF                 | **ITDC – Core Network Cluster**     | Central NAS controller                          |
+| NTN RAN Termination | **Ground Segment NTN Gateway**      | Converts NR‑NTN signaling into NGAP towards AMF |
+| UE                  | **End‑User Terminal via Satellite** | Sends SUCI created from SIM keys                |
+
+**Used by SIM provisioning?**  
+Yes — authentication challenges triggered by initial registration validate the newly provisioned SIM profile.
+
+***
+
+# **3.2 N2 — gNodeB ↔ AMF**
+
+### **Function (3GPP):**
+
+Control plane signaling (NGAP), used for UE context, mobility, RRC.    [\[rfwireless-world.com\]](https://www.rfwireless-world.com/terminology/5g-network-interfaces)
+
+### **IRIS² Mapping:**
+
+| 5GC Function          | IRIS² Subsystem                          |
+| --------------------- | ---------------------------------------- |
+| gNodeB (Regenerative) | **LEO/MEO Satellite (Regenerative RAN)** |
+| NG Interface (N2)     | **NTN Ground Entry Gateway**             |
+| AMF                   | **ITDC 5GCN**                            |
+
+**Used by BSS?**  
+Indirectly — N2 status triggers resource/session events forwarded upstream to BSS for billing.
+
+***
+
+# **3.3 N3 — gNodeB ↔ UPF**
+
+### **Function (3GPP):**
+
+User plane: transport of user data encapsulated in GTP‑U.    [\[rfwireless-world.com\]](https://www.rfwireless-world.com/terminology/5g-network-interfaces)
+
+### **IRIS² Mapping:**
+
+| Component | Subsystem                                |
+| --------- | ---------------------------------------- |
+| UPF       | **ITDC User Plane Cluster**              |
+| NTN gNB   | **Regenerative Satellite + NTN Gateway** |
+
+**Used by SIM provisioning or HSM?**  
+No — N3 is purely user‑plane, unrelated to SIM security.
+
+***
+
+# **3.4 N4 — SMF ↔ UPF**
+
+### **Function (3GPP):**
+
+UPF control: rules, QoS, traffic routing.    [\[rfwireless-world.com\]](https://www.rfwireless-world.com/terminology/5g-network-interfaces)
+
+### **IRIS² Mapping:**
+
+| Component | Subsystem                        |
+| --------- | -------------------------------- |
+| SMF       | **ITDC – Session Mgmt Function** |
+| UPF       | **Ground Segment User Plane**    |
+
+**Used by BSS?**  
+Yes — BSS receives usage data from SMF based on session rules.
+
+***
+
+# **3.5 N6 — AMF ↔ AUSF (Authentication Interface)**
+
+### **Function (3GPP):**
+
+Provides authentication vector exchange for SIM credentials.    [\[telecomtrainer.com\]](https://www.telecomtrainer.com/5g-core-interfaces/)
+
+### **IRIS² Mapping:**
+
+| Component | Subsystem                            | Notes                                                                 |
+| --------- | ------------------------------------ | --------------------------------------------------------------------- |
+| AUSF      | **ITDC – Authentication Function**   | Verifies SIM‑based 5G‑AKA                                             |
+| HSM       | **HSM Cluster (Security Perimeter)** | Stores root keys (K), used for generating SIM authentication material |
+
+**Critical Point:**  
+➡️ This is the **primary interface where HSM is used** because HSM generates or stores:
+
+*   Ki
+*   OPC
+*   Cryptographic material used for 5G AKA / EAP‑AKA'
+
+SIM provisioning systems securely send key material to HSM for storage & later derivation.
+
+***
+
+# **3.6 N9 — AMF ↔ UDM (Subscription Management)**
+
+### **Function (3GPP):**
+
+Retrieves subscriber profile, authentication vectors, and SUPI mapping.    [\[telecomtrainer.com\]](https://www.telecomtrainer.com/5g-core-interfaces/)
+
+### **IRIS² Mapping:**
+
+| Component               | Subsystem                                         |
+| ----------------------- | ------------------------------------------------- |
+| UDM/UDR                 | **ITDC Subscriber Data Repository**               |
+| AMF                     | **ITDC Access Mgmt**                              |
+| SIM Provisioning System | **Provisioning Front‑End (connected to UDM API)** |
+
+**Used by SIM provisioning?**  
+Yes — provisioning injects:
+
+*   SUPI
+*   Subscription profiles
+*   Slice/Policy information
+
+UDM stores them and AMF retrieves them when SIM authenticates.
+
+***
+
+# **4. SIM Provisioning in IRIS²**
+
+SIM Provisioning involves the following elements:
+
+### **4.1 SIM Provisioning System**
+
+*   Generates SIM profiles (IMSI/SUPI, Ki, OPC)
+*   Transfers keys securely to **HSM**
+*   Populates **UDM/UDR** with subscriber records
+
+### **4.2 HSM (Hardware Security Module)**
+
+HSM is used for:
+
+*   Storing Ki
+*   Deriving 5G‑AKA authentication vectors
+*   Securing OTA operations
+
+This aligns with the general HSM definition: secure hardware to generate, store, and use cryptographic keys. [\[joint-rese....europa.eu\]]
+(https://joint-research-centre.ec.europa.eu/jrc-highlights-report-2024/space_en)
+
+### **4.3 ITDC (Core Hosting Environment)**
+
+Hosts:
+
+*   AMF
+*   SMF
+*   AUSF
+*   UDM/UDR
+*   PCF
+*   UPF
+
+### **4.4 BSS**
+
+*   Receives subscriber profile and charging rules from PCF/UDM
+*   Tracks session events from SMF
+*   Not directly interacting with SIM, but depends on N interfaces for billing events.
+
+***
+
+# **5. End‑to‑End SIM Authentication Flow in IRIS²**
+    SIM → UE → Satellite (NR‑NTN) → NTN Gateway → AMF → AUSF → HSM
+                                                         ↓
+                                                       UDM
+
+### Step Breakdown:
+
+1.  SIM provides SUCI + cryptographic data (UICC interface).
+2.  UE sends Registration via N1.
+3.  Satellite relays to Ground Segment (N2).
+4.  AMF invokes AUSF via N6.
+5.  AUSF queries HSM for key checks.
+6.  AUSF requests subscription info from UDM via N9.
+7.  Authentication success triggers session creation (N2/N3/N4).
+8.  BSS collects usage once session starts.
+
+***
+
+# **6. Complete Mapping Summary Table**
+
+| N‑Interface        | IRIS² Ground Segment Component | Description                     | Subsystems Affected             |
+| ------------------ | ------------------------------ | ------------------------------- | ------------------------------- |
+| **UICC Interface** | UE                             | SIM operations (identity, keys) | SIM Provisioning                |
+| **N1**             | AMF + NTN Gateway              | NAS signaling                   | SIM, ITDC                       |
+| **N2**             | NTN Gateway ↔ AMF              | Control plane                   | ITDC                            |
+| **N3**             | NTN Gateway ↔ UPF              | User plane                      | ITDC                            |
+| **N4**             | SMF ↔ UPF                      | Traffic rules                   | ITDC, BSS                       |
+| **N6**             | AMF ↔ AUSF                     | Authentication                  | ITDC, **HSM**, SIM provisioning |
+| **N9**             | AMF ↔ UDM                      | Subscription                    | ITDC, SIM provisioning, BSS     |
+
+***
+
+# 🚀 **If you want, I can now produce:**
+
+### ✔ A **PowerPoint (.pptx)** version of this document
+### ✔ A **diagram-centric** architecture document (PDF)
+### ✔ A **version tailored to your actual internal IRIS² subsystem names**
+### ✔ A technical **sequence diagram** for authentication or SIM provisioning
+
+Just tell me which format you prefer!
+
+
+Voici exactement comment tu peux intervenir efficacement dans cette conversation — en tant que responsable ou représentant du sous‑système 5GCN, 
+Sans prendre position sur les parties ITDC, sécurité ou KMF, mais en recentrant la discussion sur ton scope clair, 
+Tout en apportant de la structure, de la clarté et de la valeur.
+
+✅ Objectif de ton intervention
+Tu veux :
+
+Clarifier ce qui relève du 5GCN et ce qui n’en relève pas
+Confirmer les besoins du 5GCN en termes d’HSM et de stockage des K (clé maîtresse SIM)
+Recadrer la discussion technique qui dérive vers la sécurité / KMF
+Mettre en avant que pour avancer, il faut un High‑Level Design de la partie SIM Provisioning / KMF
+Rester factuel, neutre et dans ton périmètre (pas question de répondre à la place de la sécurité)
+
+
+🗣️ Proposition de message que tu peux envoyer (clair, professionnel, utile)
+Voici un texte que tu peux copier/coller tel quel :
+
+Bonjour à tous,
+Pour compléter la discussion du point de vue 5GCN, je souhaite clarifier notre périmètre et les dépendances identifiées :
+🔹 1. Besoin en HSM côté 5GCN
+Dans notre architecture 5GCN, nous avons effectivement besoin d’un HSM dédié au stockage des clés K au sein de l’UDR, comme prévu dans la spécification 5GCN.
+Cela permet :
+
+de dériver les clefs d’authentification 5G‑AKA,
+d’assurer la cohérence entre SIM, UDR et AUSF,
+et de sécuriser l’accès aux valeurs K dans le domaine 5GCN.
+
+Ce point est déjà aligné dans la RFP.
+🔹 2. Relation avec le KMF (Security / GOVSATCOM)
+Le KMF ne relève pas du périmètre 5GCN.
+Toutefois, nous dépendons de leur design pour comprendre :
+
+comment les clés K seront générées,
+comment elles seront injectées,
+et quelle partie du cycle de vie des clés devra être synchronisée vers l’UDR.
+
+Si le choix final est d’avoir un HSM dans le KMF + un HSM dans l’UDR, cela ne pose pas de problème pour le 5GCN, mais il faut en définir clairement :
+
+les interfaces,
+les responsabilités,
+la séquence d’injection de clés.
+
+🔹 3. Besoin urgent : un High-Level Design SIM Provisioning / KMF
+Nous ne pouvons pas finaliser les dépendances 5GCN sans :
+
+le HLD de la chaîne complète SIM Provisioning,
+la description du rôle exact du KMF,
+et la définition précise des flux Security → UDR.
+
+À ce stade, le document reçu semble être une liste de exigences génériques (type NIST) et ne permet pas de valider l’architecture d’ensemble.
+🔹 4. Proposition
+Je propose que l’équipe Security/KMF fournisse :
+
+un HLD couvrant : génération K, stockage, duplication sécurisée, injection, gestion du cycle de vie,
+ainsi que les interfaces prévues vers le 5GCN/UDR.
+
+Une fois ce design disponible, nous pourrons vérifier parfaitement l’intégration dans le 5GCN et s’assurer que "toutes les pièces tombent au bon endroit".
+N’hésitez pas si vous voulez que je prépare la vue 5GCN dans ce futur HLD.
+Bien cordialement,
+Isaac
+
+🎯 Pourquoi ce message est efficace
+Il te permet de :
+
+remettre ton périmètre au centre (5GCN ≠ Security/KMF),
+clarifier où doivent aller les clés K,
+éviter les malentendus sur « l’origine » des HSM,
+demander fermement mais calmement le design qui manque,
+resserrer la discussion sur les dépendances réelles,
+montrer que tu maîtrises parfaitement l’architecture.
+
+❓ Tu veux que je reformule ce message en version :
+
+plus courte ?
+plus diplomatique ?
+plus technique ?
+plus orientée "project management" ?
+
+Dis‑moi le ton que tu préfères et je te l’adapte.
