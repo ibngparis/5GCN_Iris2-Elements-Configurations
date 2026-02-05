@@ -1,0 +1,228 @@
+Multi/Broadcast Services
+
+What is an example of a MBS use-case Iris2 can deploye
+Below is a verified, technically accurate example of an MBS (Multicast/Broadcast Services) use-case that IRIS² can realistically deploy, based on what we know from:
+
+SES technical presentation on 5G‑NTN multicast/broadcast challenges and uses
+The IRIS² technical description confirming 5G NR NTN, regenerative RAN, and integration with 5GC
+3GPP background on 5G MBS capabilities and their relevance for NTN scenarios
+
+🚨 **Example MBS Use‑Case IRIS² Can Deploy: Nationwide (or EU‑wide) Emergency Alert Broadcast over 5G‑NTN**
+
+This is one of the strongest, clearest, high‑impact MBS use‑cases for IRIS² because:
+
+IRIS² offers multiorbit LEO/MEO coverage and 5G NR NTN waveforms.
+5G‑NTN broadcast is highlighted as ideal for large-area, ubiquitous coverage.
+3GPP states that broadcast/multicast is critical for public safety push alerts and large-scale information dissemination.
+So IRIS² is perfectly aligned for this use‑case.
+
+📡 Use-Case Description: Pan-European Emergency Messaging (MBS over IRIS²)
+Scenario
+Governments or EU agencies need to broadcast real-time alerts to citizens or critical operators across vast areas, even where terrestrial 5G coverage is poor or disrupted.
+
+Examples:
+Natural disasters (earthquakes, floods, forest fires)
+Security incidents (terror alerts, civil protection notices)
+Space weather or GNSS degradation warnings
+Evacuation or safety instructions
+Why IRIS² is ideal
+Broadcast at scale over NTN
+IRIS²’s 5G NR NTN infrastructure supports MBS where the same content must reach many UEs efficiently.
+
+Ubiquitous coverage
+LEO/MEO satellites provide pan-EU reach, including:
+
+rural zones
+mountains
+maritime areas
+in disaster zones where terrestrial infrastructure is damaged
+5G MBS is explicitly designed for this
+3GPP notes public safety communications as a primary MBS use-case.
+
+IRIS² uses 5G NR NTN waveforms
+Meaning broadcast content can be transmitted natively using 5G, without extra proprietary layers.
+This is confirmed by IRIS² technical specs:
+
+“5G NR NTN waveform in Ku and Ka bands”
+“Fully integrated in 5G Core Network”
+
+Flow Example
+EU Authority → IRIS² Secure Ground Segment →  
+5G Core MBS Application Server →  
+NTN Regenerative RAN →  
+LEO/MEO Satellites →  
+UE multicast/broadcast reception
+Even low-cost NTN‑capable handsets or IoT devices can receive such alerts.
+
+🎯 Why this is a strong RFPv2-facing example
+Because it:
+aligns with governmental-secure communications (IRIS²’s primary mission)
+uses native 5G MBS functionality
+demonstrates a unique value vs terrestrial operators
+leverages the broadcast efficiency of NTN networks highlighted by SES
+
+🌍 Other possible IRIS² MBS use-cases (short list)
+Based on the same sources:
+
+1. Maritime or aeronautical safety information broadcasting
+Mariners/aircraft receive:
+meteorology updates
+navigational warnings
+SAR (search and rescue) notifications
+(Consistent with NTN broadcast strengths.)
+
+2. Firmware/Software multicast to connected devices
+For fleets of:
+IoT terminals
+drones
+sensors
+maritime terminals
+
+3. Live video multicasting for authorities
+To distribute the same encrypted feed to many government receivers:
+border surveillance
+crisis management teams
+remote intervention units
+
+4. Education or public dissemination services
+Broadcasting content to remote schools or communities with limited terrestrial connectivity (fits “broadcast suitable for large coverage” from SES).
+
+✅ If you want, I can prepare:
+A one‑page RFP‑ready slide on this use‑case
+
+** Use‑Case Overview:• EU‑wide multicast/broadcast of emergency alerts via 5G NR NTN.• Ideal for crisis communication: natural disasters, security alerts, civil protection notices.
+Why IRIS² Enables This:• Multi‑orbit LEO/MEO constellation with broad coverage (IRIS² technical description).• 5G NR NTN waveform enabling native 5G broadcast over Ku/Ka bands (IRIS² spec).
+Benefits:• Nationwide/EU‑wide reach even without terrestrial 5G.• Highly efficient multicast distribution (SES 5G‑NTN MBS challenges/use‑cases).• Robust delivery to remote, maritime, or disaster‑impacted zones.
+Technical Flow:Authority → IRIS² Secure Ground Segment → 5GC MBS App Server → NTN RAN → Satellites → User Equipment
+RFPv2 Relevance:• Requires coordination with SpaceRise for detailed MBS scenarios.• Determines sourcing approach for application‑layer broadcast services.
+
+
+A detailed technical sequence diagram for IRIS² MBS over 5G‑NTN
+A mapping of this use‑case to 5GCN, RAN, BSS, and security subsystems
+
+*** Below is a **clean, structured, RFP‑ready mapping** of the **Pan‑European Emergency Alert Broadcast (MBS) use‑case** to all relevant IRIS² subsystems: **5GCN, NTN RAN, BSS, and Security/KMF/HSM**.
+
+All mappings are grounded in the validated NTN/MBS characteristics from SES’s 5G‑NTN multicast/broadcast analysis (MBS efficiency, satellite mobility, large‑area coverage) , 3GPP MBS architecture and public‑safety relevance (broadcast/multicast for alerts, critical communications), and IRIS²’s adoption of 5G NR NTN waveforms and regenerative RAN integration with 5GCN (LEO/MEO satellites, Ku/Ka bands). [\[key4biz.it\]](https://www.key4biz.it/wp-content/uploads/2025/03/iris2presentazione.pdf) [\[etsi.org\]](https://www.etsi.org/deliver/etsi_ts/126500_126599/126502/17.00.00_60/ts_126502v170000p.pdf)
+
+***
+
+# 🛰️ **Mapping of the Emergency Alert MBS Use‑Case to IRIS² Subsystems**
+
+## ✅ **1. 5GCN (Core Network)**
+
+IRIS² uses a **fully integrated 5G Core Network**, supporting 5G NR NTN waveforms and multicast/broadcast services as per SpaceRise/SES technical descriptions. [\[etsi.org\]](https://www.etsi.org/deliver/etsi_ts/126500_126599/126502/17.00.00_60/ts_126502v170000p.pdf)
+
+### **5GCN Functions Involved:**
+
+| 5GCN Component                                   | Role in MBS Use‑Case                                                           | Why It’s Needed                                                                                                                                                                                  |
+| ------------------------------------------------ | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **MBS Application Server**                       | Generates & manages the emergency alert content                                | Required because 5G MBS uses application‑layer MBS service architecture (per 3GPP TS 26.502) [\[patents.google.com\]](https://patents.google.com/patent/WO2022031915A1/en) |
+| **BM‑SC / MB‑UPF (Broadcast/Multicast Gateway)** | Multicast session control, distribution area selection, duplication of traffic | Multicast is essential to efficiently scale NTN networks to many UEs (SES)                                            |
+| **AMF/SMF**                                      | Session setup and mobility across satellite beams                              | 5G‑NTN requires robust handover management due to moving beams (SES)                                                  |
+| **UDR/UDM**                                      | User groups, MBS policies, subscription data                                   | Supports which UEs are allowed to receive certain alerts                                                                                                                                         |
+| **UPF (MBS User Plane)**                         | Efficient distribution of multicast flows to NTN RAN                           | 5G MBS optimizes routing for large-scale multicast delivery (3GPP) [\[key4biz.it\]](https://www.key4biz.it/wp-content/uploads/2025/03/iris2presentazione.pdf)      |
+
+### **Key 5GCN Contribution**
+
+*   Enables **efficient, scalable content distribution** for millions of receivers across Europe.
+*   Supports **dynamic switching** between unicast/multicast, a key NTN challenge cited by SES .
+
+***
+
+## 🚀 **2. NTN RAN (LEO/MEO Satellites + NTN Gateway)**
+
+IRIS² includes a **regenerative 5G RAN in LEO and MEO**, using 5G NR NTN waveform in Ku/Ka bands, with full 5GC integration. [\[etsi.org\]](
+https://www.etsi.org/deliver/etsi_ts/126500_126599/126502/17.00.00_60/ts_126502v170000p.pdf)
+
+### **RAN Functions Involved:**
+
+| NTN RAN Component                             | Role                                                                                                                                                                               |
+| --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Regenerative gNodeB on LEO/MEO satellites** | Efficient satellite‑based RAN handling MBS radio bearers                                                                                                                           |
+| **Multicast/Broadcast Beam Management**       | Manages dynamic MBS coverage zones over large moving footprints                                                                                                                    |
+| **NTN Gateway**                               | Handles N2/N3 signaling and transport between gNB and 5GCN                                                                                                                         |
+| **Beam Handover Management**                  | Critical due to moving beams and feeder link variability—highlighted as a challenge for NTN MBS by SES  |
+
+### **Why RAN Is Crucial**
+
+*   Broadcast is ideal for satellite networks due to **large-area coverage** and efficient delivery of identical content to many UEs .
+*   5G MBS requires NTN‑specific mechanisms for **satellite-to-satellite handover**, beam switching, and delay compensation—documented in SES’s 5G‑NTN analysis .
+
+***
+
+## 📊 **3. BSS (Business Support Systems)**
+
+Although emergency alerts are not commercial services, the **BSS subsystem still participates**:
+
+### **BSS Responsibilities in This Use‑Case:**
+
+| Function                              | Role                                                                                       |
+| ------------------------------------- | ------------------------------------------------------------------------------------------ |
+| **Service Entitlement & User Groups** | Some alerts may be targeted (e.g., governmental users, critical infrastructure operators). |
+| **Operational Reporting**             | KPI tracking of alert reach, delivery success, per-beam analytics.                         |
+| **Resource/Cost Allocation**          | For government or agency customers of IRIS² secure services.                               |
+
+### **Why BSS Matters**
+
+3GPP identifies broadcast/multicast as important for public safety and operator service efficiency; integrating MBS with customer-facing and operational systems is necessary for accountability 
+and service-level monitoring. [\[key4biz.it\]](https://www.key4biz.it/wp-content/uploads/2025/03/iris2presentazione.pdf)
+
+***
+
+## 🔐 **4. Security Subsystems (HSM, KMF, GOVSATCOM Security Layer)**
+
+Emergency broadcast requires **trusted origin authentication**, secure control plane, and controlled access.
+
+### **Security Components Involved:**
+
+| Component                              | Role                                                                          |
+| -------------------------------------- | ----------------------------------------------------------------------------- |
+| **KMF (Key Management Facility)**      | Signs or encrypts control messages authorizing MBS transmissions              |
+| **HSM (within 5GCN)**                  | Protects MBS server keys, BM‑SC credentials, and signalling security          |
+| **HSM (within Security Domain / KMF)** | Protects government-issued digital signatures for alert authenticity          |
+| **Secure Ground Segment**              | Ensures trusted chain from authority → application layer → NTN infrastructure |
+
+### **Security Relevance**
+
+*   5G MBS requires secure **content origin authentication** to prevent false emergency alerts.
+*   NTN introduces additional challenges (long propagation delays, beam mobility) requiring robust security integration (SES) .
+
+***
+
+# 🧩 **5. Full End‑to‑End Mapping Summary**
+
+    Authority
+       ↓ (Signed Alert)
+    KMF / Security Domain (Gov)
+       ↓ Secure Control
+    MBS Application Server (5GCN)
+       ↓ Multicast Session
+    BM-SC / MB-UPF → UDR/UDM for policy
+       ↓ N2/N3
+    NTN Gateway
+       ↓ Satellite Link (NR NTN, Ku/Ka)
+    Regenerative gNodeB on LEO/MEO
+       ↓ Multicast Broadcast Beam
+    UE Receives Emergency Alert
+
+### System-Level Roles
+
+*   **5GCN** → Orchestrates and distributes the MBS flow
+*   **NTN RAN** → Broadcast delivery across multi-orbit beams
+*   **BSS** → Operational oversight and entitlement
+*   **Security/KMF/HSM** → Trust, signatures, control-plane integrity
+
+***
+
+# 🎯 **If you want, I can generate next:**
+
+*   A **PowerPoint slide mapping** this entire architecture
+*   A **sequence diagram** (MSC) showing message flow from authority → UE
+*   A **RFP‑ready subsection** describing IRIS² MBS capabilities
+*   A diagram showing **interfaces (N2/N3/Nmbs, etc.) mapped to RAN/5GCN/Security**
+
+Just tell me what format you prefer!
+RFP wording: “justification” + “sourcing implications” + “SpaceRise interaction”
+Just tell me what format you need!
+
+
