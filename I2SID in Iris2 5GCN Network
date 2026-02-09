@@ -1,0 +1,101 @@
+HG OSS is the one in charge of understanding the SLA´s of contracted products with 5GCN KPI´s and other subsystems inside IRIS².
+5GCN OSS. This is the 5G Orchestrator for all the different components of the 5G Core Network and User Plane Network. Once a Product needs to be booked, BSS will activate the SIM via the HG OSS to the 5GC OSS, according to the I2SID SIM number received in the Product Request with the corresponding quality of service among other SLA´s that can be requested, as it is shown in the Product Catalogue chapter 12. Currently, at the moment of this Technical Specification, there will be no 5G Slices in IRIS² solution first baseline, but future versions of IRIS² will contemplate them. TBD How can HG OSS be performed according to I2SID if there is no slicing baseline environment ...? 
+Copilot said:
+Copilot
+Below is the clean, precise architectural explanation of how HG OSS can still orchestrate services using I2SID even though the IRIS² baseline has no slicing — and why there is no contradiction in the TS.
+
+✅ How HG OSS Uses I2SID Without Slicing in the Baseline
+To understand why there is no conflict, we must isolate the three concepts involved:
+
+Subscriber Identity → I2SID
+Service Configuration / SLA / QoS → managed through 5GCN OSS
+Network Slicing → not part of baseline (future capability)
+Let’s unpack them.
+
+1. I2SID = Subscriber Identifier (Not a Slice Identifier)
+The Technical Specification states that IRIS² uses I2SID as the unique subscriber identity for HardGov services (instead of MSISDN or IMSI).
+PDF type
+I-01118-RFP-SPC-RISE_V1.0_5GCN Technical Specification V2
+
+I2SID is required for:
+
+Identifying which subscriber profile to activate
+Applying the proper SLA/QoS defined in the product
+Triggering activation flows in HG OSS → 5G OSS → Provisioning Gateway → UDM/UDR
+This part does not require slices.
+
+➡️ I2SID belongs to the subscriber profile, not to the slice definition.
+
+2. SLA/QoS Enforcement Works Without Slicing
+The TS clearly states:
+
+HG OSS is the one in charge of understanding the SLA’s of contracted products with 5GCN KPIs…
+Once a Product is booked, HG OSS will send the request using I2SID to 5G OSS… with the corresponding quality of service.
+There will be no 5G slices in IRIS² baseline (future versions will add them).
+PDF type
+I-01118-RFP-SPC-RISE_V1.0_5GCN Technical Specification V2
+
+In a non-sliced 5G Core, SLA enforcement is still fully possible:
+
+✔ QoS enforcement happens through:
+5QI / QFI assignment (3GPP TS 23.501 / 23.502 mechanisms)
+PCC rules from PCF
+SMF session rules
+UPF UL‑CL / routing rules
+DNN selection
+All these mechanisms work independently of slicing.
+
+📌 In the IRIS² baseline, each product SKU from the Product Catalogue simply maps to:
+
+Product → SLA/QoS profile → QCI/5QI/QFI rules → PCF policy → SMF configuration
+➡️ No slice required.
+
+3. Why HG OSS Can Still Operate Normally Without Slicing
+HG OSS receives:
+Product request
+I2SID
+SLA/QoS parameters for that product
+Requested DNN (given by OTT application, per TS)
+PDF type
+I-01118-RFP-SPC-RISE_V1.0_5GCN Technical Specification V2
+HG OSS instructs 5G OSS to:
+Activate subscriber profile for this I2SID
+Assign the correct QoS parameters
+Configure PCF/SMF session policies
+Ensure UPF routing supports the SLA
+All of this is part of normal 5G SA operation, even in a non-sliced deployment.
+
+In other words:
+✔ I2SID = Who is the subscriber?
+✔ SLAs/QoS = What quality is applied?
+✖ Slices = Not needed to apply SLA/QoS in baseline
+
+➡️ HG OSS only needs I2SID + SLA/QoS. Slices are optional future enhancement.
+
+4. So Why Does the TS Say Slicing = Not in Baseline?
+Because slicing is only needed when IRIS² wants:
+
+Ultra-compartmentalised logical networks
+Per‑state or per‑mission segmentation
+Dynamic network resource partitioning
+Multiple services simultaneously sharing infra with isolation guarantees
+IRIS² HG baseline offers only broadband data services, where:
+
+QoS is enough
+Dedicated slices are not yet required
+Security/isolation is provided by PLMN/SNPN parameters and policies, not slices
+Thus:
+
+✔ I2SID still fully applies
+✔ HG OSS still orchestrates services
+✔ QoS still enforces the SLA
+✖ Slice selection not used (NSSAI = not provisioned in baseline)
+5. Final Answer — The Key Sentence
+HG OSS operates based on I2SID because subscriber identity and SLA/QoS activation do not depend on slicing. Slicing would only be required for future multi-slice segmentation, but the entire SLA/QoS machinery already works natively without it in the baseline 5G Core.
+
+If you want, I can also produce:
+✓ A diagram showing HG OSS → 5G OSS → PG → UDM/UDR → PCF/SMF flows
+✓ A baseline vs future slicing architecture comparison
+✓ A clarification note to send to the vendors
+
+Would you like that?
