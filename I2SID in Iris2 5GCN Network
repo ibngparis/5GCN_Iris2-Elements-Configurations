@@ -1,7 +1,11 @@
-HG OSS is the one in charge of understanding the SLA´s of contracted products with 5GCN KPI´s and other subsystems inside IRIS².
-5GCN OSS. This is the 5G Orchestrator for all the different components of the 5G Core Network and User Plane Network. Once a Product needs to be booked, BSS will activate the SIM via the HG OSS to the 5GC OSS, according to the I2SID SIM number received in the Product Request with the corresponding quality of service among other SLA´s that can be requested, as it is shown in the Product Catalogue chapter 12. Currently, at the moment of this Technical Specification, there will be no 5G Slices in IRIS² solution first baseline, but future versions of IRIS² will contemplate them. TBD How can HG OSS be performed according to I2SID if there is no slicing baseline environment ...? 
-Copilot said:
-Copilot
+HG OSS is in charge of understanding the SLA´s of contracted products with 5GCN KPI´s and other subsystems inside IRIS².
+5GCN OSS is the 5G Orchestrator for all the different components of the 5G Core Network and User Plane Network. 
+Once a Product needs to be booked, BSS will activate the SIM via the HG OSS to the 5GC OSS, according to the I2SID SIM number received in the Product Request 
+with the corresponding quality of service among other SLA´s that can be requested, as it is shown in the Product Catalogue chapter 12. 
+At the moment of this TS, no 5G Slices is in IRIS² solution first baseline, but future versions of IRIS² will contemplate them. TBD 
+So, 
+How can HG OSS be performed according to I2SID if there is no slicing baseline environment ...? 
+
 Below is the clean, precise architectural explanation of how HG OSS can still orchestrate services using I2SID even though the IRIS² baseline has no slicing — and why there is no contradiction in the TS.
 
 ✅ How HG OSS Uses I2SID Without Slicing in the Baseline
