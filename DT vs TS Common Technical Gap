@@ -1,0 +1,290 @@
+Below is the **Common Technical Gap Analysis** between:
+
+*   **SpaceRISE IRIS² 5GCN Technical Specification (TS)** — I‑01118-RFP-SPC‑RISE v1.0 [\[5GCN - VOL...T-Systems | PDF\]](https://hispasat-my.sharepoint.com/personal/iblondel_ext_hispasat_com/Documents/Microsoft%20Copilot%20Chat%20Files/5GCN%20-%20VOL%20II%20-%20Technical%20Proposal%20-%20T-Systems.pdf)
+*   **T‑Systems 5GCN Technical Proposal – VOL II** (First Stage Technical Offer) [\[5GCN - VOL...T-Systems | PDF\]](https://hispasat-my.sharepoint.com/personal/iblondel_ext_hispasat_com/Documents/Microsoft%20Copilot%20Chat%20Files/5GCN%20-%20VOL%20II%20-%20Technical%20Proposal%20-%20T-Systems.pdf)
+
+This identifies **technical gaps, partial compliances, open points, and misalignments** that *T‑Systems has either openly stated* or that arise by comparing the proposal to the TS.
+
+This is exactly the type of content you will need to **raise during RFP discussions**.
+
+***
+
+# ✅ **IRIS² – T‑Systems Common Technical Gap Analysis (RFP Discussion Focus)**
+
+Below is a structured “Gaps-to-Rise” list ordered by **severity and impact**.
+
+***
+
+# 🔴 **1. Missing Mandatory Network Functions (Critical Gaps)**
+
+## **1.1 Multicast/Broadcast Service (MBS) – Not Offered**
+
+### TS requirement
+
+The IRIS² TS mandates support for **Multicast / Broadcast** and references functions:  
+MBSF, MB‑SMF, CBCF under Section 7.8.x and Table 6 (NF list). [\[5GCN - VOL...T-Systems | PDF\]](https://hispasat-my.sharepoint.com/personal/iblondel_ext_hispasat_com/Documents/Microsoft%20Copilot%20Chat%20Files/5GCN%20-%20VOL%20II%20-%20Technical%20Proposal%20-%20T-Systems.pdf)
+
+### T‑Systems proposal
+
+T‑Systems explicitly states these features **cannot be offered** because **they are not developed** due to lack of market demand.  
+Listed in **section 1.9**, under “network functions not currently offered”:
+
+> “Multicast/Broadcast Service (MBS) including MBSF, CBCF, MB‑SMF” [\[5GCN - VOL...T-Systems | PDF\]](https://hispasat-my.sharepoint.com/personal/iblondel_ext_hispasat_com/Documents/Microsoft%20Copilot%20Chat%20Files/5GCN%20-%20VOL%20II%20-%20Technical%20Proposal%20-%20T-Systems.pdf)
+
+### Gap Category: **❌ Non‑Compliant (Critical)**
+
+### Must be raised during RFP discussions:
+
+IRIS² HardGov baseline includes broadcast emergency scenarios and consistent behaviour across LEO/MEO beams → cannot be deferred.
+
+***
+
+## **1.2 Network Slice Admission Control Function (NSACF) – Not Offered**
+
+TS lists NSACF as a required NF for future slicing scenarios (Table 6, Section 7.1.1). [\[5GCN - VOL...T-Systems | PDF\]](https://hispasat-my.sharepoint.com/personal/iblondel_ext_hispasat_com/Documents/Microsoft%20Copilot%20Chat%20Files/5GCN%20-%20VOL%20II%20-%20Technical%20Proposal%20-%20T-Systems.pdf)
+
+T‑Systems lists NSACF under network functions **not offered**. [\[5GCN - VOL...T-Systems | PDF\]](https://hispasat-my.sharepoint.com/personal/iblondel_ext_hispasat_com/Documents/Microsoft%20Copilot%20Chat%20Files/5GCN%20-%20VOL%20II%20-%20Technical%20Proposal%20-%20T-Systems.pdf)
+
+### Gap Category: **❌ Non‑Compliant**
+
+### Impact:
+
+*   Breaks slice lifecycle logic for future LightGov/ComGov / critical slicing extensions.
+*   Should not block baseline RFPv1, but must be resolved in RFPv2.
+
+***
+
+# 🔴 **2. TMF API Coverage – Incomplete (Critical)**
+
+## TS requirement:
+
+A large set of TMF APIs is mandated for orchestration, mediation, inventory, PM/FM, resource activation, etc. (TS §7.3).  
+Includes: TMF641, 638, 639, 640, 652, 634, 642, 628, 657, 653, 656, 667. [\[5GCN - VOL...T-Systems | PDF\]](https://hispasat-my.sharepoint.com/personal/iblondel_ext_hispasat_com/Documents/Microsoft%20Copilot%20Chat%20Files/5GCN%20-%20VOL%20II%20-%20Technical%20Proposal%20-%20T-Systems.pdf)
+
+## T‑Systems proposal:
+
+T‑Systems acknowledges:
+
+> “Not all requested APIs are supported in the current offer… The APIs between Management Plane and DBB are **not based on TMF APIs**.” [\[5GCN - VOL...T-Systems | PDF\]](https://hispasat-my.sharepoint.com/personal/iblondel_ext_hispasat_com/Documents/Microsoft%20Copilot%20Chat%20Files/5GCN%20-%20VOL%20II%20-%20Technical%20Proposal%20-%20T-Systems.pdf)
+
+### Gap Category: **❌ Non‑Compliant / Partial Compliance**
+
+### Impact:
+
+*   Direct conflict with IRIS² DBB integration model.
+*   HG OSS cannot orchestrate 5GCN domain as required.
+*   Resource/service inventory alignment breaks.
+
+***
+
+# 🔴 **3. UPF Placement & Geo‑Redundancy – Only Partial Alignment**
+
+## TS requirement:
+
+UPFs must be placed in Gateways **and** backup UPFs must exist in GCCs for resiliency. (TS §7.8.x and architectural sections). [\[5GCN - VOL...T-Systems | PDF\]](https://hispasat-my.sharepoint.com/personal/iblondel_ext_hispasat_com/Documents/Microsoft%20Copilot%20Chat%20Files/5GCN%20-%20VOL%20II%20-%20Technical%20Proposal%20-%20T-Systems.pdf)
+
+## T‑Systems proposal:
+
+States:
+
+> “Current proposal assumes UPFs placed **only on GW locations**.”  
+> “Georedundant user plane session continuity is **not included**.” [\[5GCN - VOL...T-Systems | PDF\]](https://hispasat-my.sharepoint.com/personal/iblondel_ext_hispasat_com/Documents/Microsoft%20Copilot%20Chat%20Files/5GCN%20-%20VOL%20II%20-%20Technical%20Proposal%20-%20T-Systems.pdf)
+
+### Gap Category: **❌ Non‑Compliant (Critical for IRIS² availability model)**
+
+### Impact:
+
+*   Violates IRIS² service continuity and DR requirements.
+*   Breaks survivability during Gateway loss.
+
+### Must be raised:
+
+“Can UPFs be located only on GW locations?” is already in their Open Topics list (P2). [\[5GCN - VOL...T-Systems | PDF\]](https://hispasat-my.sharepoint.com/personal/iblondel_ext_hispasat_com/Documents/Microsoft%20Copilot%20Chat%20Files/5GCN%20-%20VOL%20II%20-%20Technical%20Proposal%20-%20T-Systems.pdf)
+
+***
+
+# 🔥 **4. NTN‑Specific Requirements – Missing Quantitative Commitments**
+
+## TS requirement:
+
+TS §6.5 requires the 5GC to support:
+
+*   \~40,000 satellite cells
+*   \~6,000 cells per CU
+*   \~10,000 Tracking Areas
+*   Quasi‑static NCGI mapping
+*   NTN-specific mobility behaviour (N2/Xn HO) [\[5GCN - VOL...T-Systems | PDF\]](https://hispasat-my.sharepoint.com/personal/iblondel_ext_hispasat_com/Documents/Microsoft%20Copilot%20Chat%20Files/5GCN%20-%20VOL%20II%20-%20Technical%20Proposal%20-%20T-Systems.pdf)
+
+## T‑Systems proposal:
+
+*   Says NTN features supported “up to Rel‑19”
+*   **Does not commit** to any numerical capacities
+*   Lists “NTN roadmap” as an Open Topic (P1) [\[5GCN - VOL...T-Systems | PDF\]](https://hispasat-my.sharepoint.com/personal/iblondel_ext_hispasat_com/Documents/Microsoft%20Copilot%20Chat%20Files/5GCN%20-%20VOL%20II%20-%20Technical%20Proposal%20-%20T-Systems.pdf)
+
+### Gap Category: **⚠️ Clarification Required (High Impact)**
+
+### Issues to raise:
+
+*   No confirmation that AMF/SMF/UDM/NRF databases scale to IRIS² levels.
+*   No validation of NTN mobility volumes (HOs per minute, paging load).
+*   Need proof for quasi-static cell management.
+
+***
+
+# 🔥 **5. Subscriber Identity (I2SID) – Not Confirmed**
+
+## TS requirement:
+
+Mandatory use of **I2SID** in subscription data, UDR, UDM, and provisioning flows. (TS §6.3) [\[5GCN - VOL...T-Systems | PDF\]](https://hispasat-my.sharepoint.com/personal/iblondel_ext_hispasat_com/Documents/Microsoft%20Copilot%20Chat%20Files/5GCN%20-%20VOL%20II%20-%20Technical%20Proposal%20-%20T-Systems.pdf)
+
+## T‑Systems proposal:
+
+*   Lists I2SID as **Open Topic #1 (Priority P1)** requiring more information.
+
+> “More information is needed about I2SID… assumption is that no proprietary development is needed.” [\[5GCN - VOL...T-Systems | PDF\]](https://hispasat-my.sharepoint.com/personal/iblondel_ext_hispasat_com/Documents/Microsoft%20Copilot%20Chat%20Files/5GCN%20-%20VOL%20II%20-%20Technical%20Proposal%20-%20T-Systems.pdf)
+
+### Gap Category: **⚠️ Clarification Required (High)**
+
+### Impact:
+
+*   I2SID is the *HardGov identity anchor*.
+*   Essential for HG OSS → 5G OSS → PGW flows.
+*   Cannot proceed to detailed design without firm confirmation.
+
+***
+
+# 🔥 **6. CDR Delivery & Offline Charging – Partial**
+
+## TS requirement:
+
+*   Charging via CHF
+*   Secure delivery to DBB via TMF interfaces
+*   Offline CDR support
+*   Support for TS 32.xxx charging framework
+
+## T‑Systems proposal:
+
+*   Offers **limited offline charging only**
+*   CDR delivery protocol “open topic” (#13)
+*   DBB mediation does **not** use TMF APIs by default. [\[5GCN - VOL...T-Systems | PDF\]](https://hispasat-my.sharepoint.com/personal/iblondel_ext_hispasat_com/Documents/Microsoft%20Copilot%20Chat%20Files/5GCN%20-%20VOL%20II%20-%20Technical%20Proposal%20-%20T-Systems.pdf)
+
+### Gap Category: **⚠️ Partial Compliance**
+
+### Impact:
+
+*   Billing integration is incomplete
+*   Unclear if CDR fields/format meet TS requirements
+*   Potential incompatibility with HG BSS ingest flows
+
+***
+
+# 🟡 **7. EIR – Optional Instead of Mandatory**
+
+TS requires 5G-EIR for equipment validation (TS §7.1.x).   
+T‑Systems offers EIR **only optionally**, priced separately. [\[5GCN - VOL...T-Systems | PDF\]](https://hispasat-my.sharepoint.com/personal/iblondel_ext_hispasat_com/Documents/Microsoft%20Copilot%20Chat%20Files/5GCN%20-%20VOL%20II%20-%20Technical%20Proposal%20-%20T-Systems.pdf)
+
+### Gap Category: **⚠️ Partial Compliance**
+
+### Impact:
+
+*   EIR needed for PEI validation and IRIS² security posture.
+
+***
+
+# 🟡 **8. UDSF – Provided Only as Vendor‑Internal Feature**
+
+TS expects a discrete UDSF NF (TS Table 6).   
+T‑Systems provides UDSF as a **distributed embedded functionality** inside other NFs.  
+Open Topic #11 asks if this is acceptable. [\[5GCN - VOL...T-Systems | PDF\]](https://hispasat-my.sharepoint.com/personal/iblondel_ext_hispasat_com/Documents/Microsoft%20Copilot%20Chat%20Files/5GCN%20-%20VOL%20II%20-%20Technical%20Proposal%20-%20T-Systems.pdf)
+
+### Gap Category: **⚠️ Clarification**
+
+### Impact:
+
+*   May affect state sharing across AMF pools
+*   Must ensure IRIS² scaling & failover behaviour
+
+***
+
+# 🟡 **9. TMF APIs for DBB → explicitly not supported**
+
+TS requires DBB ingestion via TMF APIs.  
+T‑Systems says DBB APIs **are not TMF-based** and would require custom work. [\[5GCN - VOL...T-Systems | PDF\]](https://hispasat-my.sharepoint.com/personal/iblondel_ext_hispasat_com/Documents/Microsoft%20Copilot%20Chat%20Files/5GCN%20-%20VOL%20II%20-%20Technical%20Proposal%20-%20T-Systems.pdf)
+
+### Gap Category: **⚠️ Partial Compliance**
+
+***
+
+# 🟡 **10. Security Interfaces (SECMON, GNSS) – Not Defined**
+
+Open Topics:
+
+*   \#6 “Details of interface between 5GC and SECMON”
+*   \#7 “Details of interface with GNSS” [\[5GCN - VOL...T-Systems | PDF\]](https://hispasat-my.sharepoint.com/personal/iblondel_ext_hispasat_com/Documents/Microsoft%20Copilot%20Chat%20Files/5GCN%20-%20VOL%20II%20-%20Technical%20Proposal%20-%20T-Systems.pdf)
+
+TS states GNSS and SECMON are external interfaces TBD but required. (TS §21) [\[5GCN - VOL...T-Systems | PDF\]](https://hispasat-my.sharepoint.com/personal/iblondel_ext_hispasat_com/Documents/Microsoft%20Copilot%20Chat%20Files/5GCN%20-%20VOL%20II%20-%20Technical%20Proposal%20-%20T-Systems.pdf)
+
+### Gap Category: **⚠️ Clarification Needed**
+
+***
+
+# 🟡 **11. IPSec Gateways – Not Included**
+
+TS requires IPSec for NG interfaces (TS §7.5)   
+T‑Systems states: [\[5GCN - VOL...T-Systems | PDF\]](https://hispasat-my.sharepoint.com/personal/iblondel_ext_hispasat_com/Documents/Microsoft%20Copilot%20Chat%20Files/5GCN%20-%20VOL%20II%20-%20Technical%20Proposal%20-%20T-Systems.pdf)
+
+> “External security solutions… are not included in the offer.” [\[5GCN - VOL...T-Systems | PDF\]](https://hispasat-my.sharepoint.com/personal/iblondel_ext_hispasat_com/Documents/Microsoft%20Copilot%20Chat%20Files/5GCN%20-%20VOL%20II%20-%20Technical%20Proposal%20-%20T-Systems.pdf)
+
+### Gap Category: **⚠️ Partial Compliance**
+
+***
+
+# 🟡 **12. SSC Modes – Limited**
+
+Open Topic #15 clarifies SSC Modes 2 & 3 are **not supported**.  
+TS requires SSC support for continuity (TS 7.8). [\[5GCN - VOL...T-Systems | PDF\]](https://hispasat-my.sharepoint.com/personal/iblondel_ext_hispasat_com/Documents/Microsoft%20Copilot%20Chat%20Files/5GCN%20-%20VOL%20II%20-%20Technical%20Proposal%20-%20T-Systems.pdf)
+
+### Gap Category: **⚠️ Partial Compliance**
+
+***
+
+# 🟢 **13. Non‑Critical Gaps**
+
+These are lower-impact but should still be raised:
+
+*   S1000D documentation format (Topic #17)
+*   IVV security perimeter assumptions (Topic #20)
+*   Emulator acceptance (Topic #18)
+
+***
+
+# 📌 **Summary Table (RFP discussion‑ready)**
+
+| Gap Area     | T‑Systems Position | TS Requirement                     | Gap Type |
+| ------------ | ------------------ | ---------------------------------- | -------- |
+| MBS          | Not offered        | Mandatory NFs (MBSF, CBCF, MB‑SMF) | ❌ NC     |
+| NSACF        | Not offered        | Required for slicing future        | ❌ NC     |
+| UPF at GCC   | Only GW            | GCC backup required                | ❌ NC     |
+| TMF APIs     | Partial            | Full set required                  | ❌ NC/PC  |
+| I2SID        | Not confirmed      | Mandatory                          | ⚠️ CL    |
+| NTN scaling  | No numbers         | 40k cells, 6k/cU, 10k TA           | ⚠️ CL    |
+| Charging/CDR | Limited            | Full TS 32 compliance              | ⚠️ PC    |
+| EIR          | Optional           | Required                           | ⚠️ PC    |
+| UDSF         | Embedded only      | Dedicated NF                       | ⚠️ CL    |
+| GNSS, SECMON | Not defined        | TS external interfaces             | ⚠️ CL    |
+| SSC modes    | Only SSC1          | Support required                   | ⚠️ PC    |
+| IPsec GW     | Not included       | TS requires on NG                  | ⚠️ PC    |
+
+***
+
+# 🧭 Want the next step?
+
+I can also produce:
+
+### ✓ **Gap Closure Plan** (IRIS² + T‑Systems responsibilities)
+
+### ✓ **Excel comparison matrix (TS vs T‑Systems)**
+
+### ✓ **Q\&A package for the next RFP clarification round**
+
+Just tell me!
