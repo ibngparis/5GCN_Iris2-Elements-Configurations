@@ -1,0 +1,260 @@
+Here is a **clean, RFP‑ready Q\&A package** built directly from your gap analysis.  
+It is written in a **question–answer format**, exactly as typically used in RFP Clarification Rounds.
+
+***
+
+# 📌 **IRIS² – T‑Systems RFP Clarification Package (Q\&A Format)**
+
+**For Next Clarification Round**
+
+This package structures each technical gap into **precise questions** to T‑Systems and provides **expected outcomes**, so you can drive the discussion and ensure commitments are explicit, binding, and measurable.
+
+***
+
+# 🔴 **1. Mandatory Network Functions Missing**
+
+## **Q1 — Multicast/Broadcast Service (MBS) Support**
+
+**Question:**  
+The TS mandates MBSF, MB‑SMF, and CBCF for Multicast/Broadcast (TS Table 6 & §7.8.x). Your proposal lists these as “not offered.”  
+**Can you confirm whether MBS support will be delivered, and if so, provide a delivery roadmap, maturity level, and commercial impact?**
+
+**Expected Outcome:**
+
+*   Confirm whether MBS will be supported at all
+*   Provide a delivery commitment (date) or explicit exclusion
+*   Clarify whether development is required and who funds it
+
+***
+
+## **Q2 — NSACF Availability**
+
+**Question:**  
+NSACF is listed as mandatory for future slicing evolution (TS §7.1.1). You have stated NSACF is not offered.  
+**Do you plan to support NSACF in future releases? If yes, specify version/timelines; if not, provide justification.**
+
+**Expected Outcome:**
+
+*   Clear Yes/No
+*   Timeline for inclusion (if yes)
+*   Commercial/technical impact of non-support
+
+***
+
+# 🔴 **2. TMF API Requirements Not Met**
+
+## **Q3 — Full TMF API Coverage**
+
+**Question:**  
+TS §7.3 mandates a full set of TMF APIs (e.g., 641, 638, 639, 640, 652, 634, 642, 628, 657, 653, 656, 667).  
+Your proposal indicates partial support and non‑TMF interfaces for DBB.  
+**Please provide a complete list of TMF APIs you will support, including delivery dates, maturity levels, and any deviations from TS requirements.**
+
+**Expected Outcome:**
+
+*   Detailed TMF API compliance matrix
+*   Confirmation whether DBB–5GMP integration will be TMF-based
+*   Required customizations (if any)
+
+***
+
+# 🔴 **3. UPF Placement & Geo‑Redundancy Misalignment**
+
+## **Q4 — UPF Deployment at GCCs**
+
+**Question:**  
+The TS requires UPF deployments both at Gateways (GW) and GCCs for geo‑redundancy and survivability.  
+Your proposal restricts UPFs to GW locations only.  
+**Will you support UPF placement in GCCs? If yes, provide the required architectural changes and timeline.**
+
+**Expected Outcome:**
+
+*   Yes/No confirmation
+*   Architectural diagram update
+*   Session continuity behaviour (PFCP redundancy, state sync)
+
+***
+
+## **Q5 — Geo‑Redundant User Plane Support**
+
+**Question:**  
+Your proposal states that geo‑redundant session continuity is not supported.  
+**Can you confirm whether this feature will be delivered, and if so, provide technical details on UPF failover behaviour and state replication?**
+
+**Expected Outcome:**
+
+*   Clear commitment
+*   Failover timing (RTO) & data loss tolerance (RPO)
+*   Required licenses/add-ons
+
+***
+
+# 🔥 **4. NTN Scaling Requirements Not Confirmed**
+
+## **Q6 — Quantitative NTN Scalability Compliance**
+
+**Question:**  
+TS §6.5 defines explicit capacity requirements (e.g., \~40k cells, \~6k cells/CU, \~10k TAs).  
+Your proposal does not provide any numerical commitments.  
+**Please provide confirmed NF capacity benchmarks for AMF/SMF/UDM/NRF aligned to IRIS² NTN scaling requirements.**
+
+**Expected Outcome:**
+
+*   Verified dimensioning numbers
+*   Benchmark methodology
+*   Restrictions and bottlenecks
+
+***
+
+## **Q7 — NTN Mobility & Paging Performance**
+
+**Question:**  
+NTN mobility pattern generates extreme HO rates and paging loads.  
+**Can you provide performance metrics (HOs/min, paging throughput) and validate that your 5GCN can handle IRIS² NTN mobility characteristics?**
+
+**Expected Outcome:**
+
+*   Numerical performance envelope
+*   Stress-test reports
+*   Any required NF clustering limits
+
+***
+
+# 🔥 **5. Subscriber Identity (I2SID)**
+
+## **Q8 — I2SID Functional & Data Model Support**
+
+**Question:**  
+I2SID is mandatory for UDM/UDR/Provisioning (TS §6.3). You list this as Open Topic #1.  
+**Can you confirm full I2SID support across UDR, UDM, CHF, PCF, and all provisioning workflows, including schema changes?**
+
+**Expected Outcome:**
+
+*   Yes/No response
+*   Required changes to DB schema/API
+*   Timeline + testing implications
+
+***
+
+# 🔥 **6. Charging, CDR & Offline Support**
+
+## **Q9 — CDR Format, Fields, Protocol & Delivery**
+
+**Question:**  
+The TS requires TS 32.xxx‑compliant CDRs, delivered securely to DBB via TMF-family APIs.  
+Your offer includes only partial offline charging and marks CDR delivery protocol as “open topic.”  
+**Please confirm full compliance to TS 32.xxx, including CDR schema, export protocol, and TMF‑compliant DBB ingestion.**
+
+**Expected Outcome:**
+
+*   Full CDR field list
+*   Transport protocol (TLS, FTPS, TMF APIs?)
+*   Support for offline/online charging completeness
+
+***
+
+# 🟡 **7. EIR Status**
+
+## **Q10 — Mandatory Inclusion of 5G-EIR**
+
+**Question:**  
+TS mandates a 5G‑EIR.  
+Your proposal offers it only optionally.  
+**Can you confirm whether EIR will be included in the baseline? If not, explain the technical limitations and pricing impact.**
+
+**Expected Outcome:**
+
+*   Inclusion as mandatory NF
+*   Or formal exclusion with rationale
+*   Effects on PEI validation flows
+
+***
+
+# 🟡 **8. UDSF Deployment Model**
+
+## **Q11 — Dedicated UDSF NF Availability**
+
+**Question:**  
+TS Table 6 lists UDSF as a distinct NF. You instead provide UDSF as embedded functionality across NFs.  
+**Can you provide a dedicated UDSF option, and if yes, what is the architecture, scaling, and data persistence model?**
+
+**Expected Outcome:**
+
+*   Yes/No
+*   Impact on AMF/SMF state-sharing
+*   Data consistency guarantees
+
+***
+
+# 🟡 **9. SECMON & GNSS Interface Definition**
+
+## **Q12 — Interface Specifications**
+
+**Question:**  
+Open Topics #6 and #7 request detail on SECMON and GNSS interfaces.  
+TS §21 considers them mandatory external interfaces.  
+**Please provide interface specifications, security model, and supported protocols for SECMON and GNSS integration.**
+
+**Expected Outcome:**
+
+*   Interface definitions
+*   Whether configuration is pull/push
+*   Certificates, authentication, and transport details
+
+***
+
+# 🟡 **10. IPSec Gateways**
+
+## **Q13 — IPSec Support for NG Interfaces**
+
+**Question:**  
+TS §7.5 mandates IPSec protection for NG interfaces.  
+Your proposal excludes external security solutions.  
+**Will IPSec gateways be provided, or must IRIS² procure them separately? If provided, specify throughput, HA, and supported cipher suites.**
+
+**Expected Outcome:**
+
+*   Clear delivery responsibility
+*   Technical specs
+*   Integration details
+
+***
+
+# 🟡 **11. SSC Modes**
+
+## **Q14 — Support for SSC Modes 2 & 3**
+
+**Question:**  
+Your Open Topic #15 indicates only SSC Mode 1 is supported, whereas TS requires SSC1/2/3 for continuity.  
+**Do you plan to support SSC2 & SSC3, and if yes, when?**
+
+**Expected Outcome:**
+
+*   Confirm support plan
+*   Session continuity behaviour
+*   Timeline for feature activation
+
+***
+
+# 🟢 **12. Non‑Critical Clarifications**
+
+## **Q15 — S1000D Documentation Format**
+
+Confirm whether S1000D documentation can be provided and by which release.
+
+## **Q16 — IVV Perimeter**
+
+Clarify assumptions regarding the IVV-level security boundaries.
+
+## **Q17 — Emulator Acceptance**
+
+Define what level of emulator fidelity you provide and what TS requirements it covers.
+
+***
+
+# 📌 **Would you like this packaged as a PDF, Word, or RFP submission template?**
+
+I can also generate:  
+✅ a **cover letter**,  
+✅ a **RFP escalation matrix**, or  
+✅ a **negotiation script** for the clarification meeting.
